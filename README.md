@@ -1,6 +1,6 @@
 # Ramzor
 
-1. Draw the raod.
+1. Draw the road.
 2. Draw the cars.
 3. Draw the lights.
 4. When the user presss g, turn on the light and move the cars.
