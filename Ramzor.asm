@@ -6,16 +6,16 @@
 ;=========================================
 ; Basic program to draw a circle
 ;=========================================
- mode db 13h ;
- x_center dw 100
- y_center dw 100
- y_value dw 0
- x_value dw 15 ;r
- decision dw 0   
- startpoint dw ?
- h dw ?
- w dw ?
- color db 3 ;1=blue
+ mode db 13h ; type of graphic mode
+ x_center dw 100 ; x center of circle, for drawing it
+ y_center dw 100 ; y center of circle, for drawing it
+ y_value dw 0 ; nessesary variable for circle drawings 
+ x_value dw 15 ; radius of circle, for drawing it
+ decision dw 0 ; nessesary variable for circle drawings   
+ startpoint dw ? ; start point for line drawings
+ h dw ? ; height of the line that is drawn
+ w dw ? ; weight of the line that is drawn
+ color db 3 ; color of the drawn thing
 ;=========================================
 .CODE
 
