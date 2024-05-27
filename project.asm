@@ -270,7 +270,10 @@ move_car_bottom proc
     cmp dx, 0
     je u11
     
-    call draw_lr_line 
+    call draw_lr_line  
+    
+    mov w, cx 
+    mov h, dx
     
   u11:    
     mov color, 0
@@ -294,7 +297,7 @@ go proc
     
     sub h, 25
     call move_car_bottom
-    add h, 25
+    add h, 23
       
   u5:         
     call move_car
@@ -358,41 +361,41 @@ start:
  int 10h ;call graphics interrupt 
  mov color, 7
 ;==========================     
- ;mov x_center, 235
- ;call Draw_Circle 
- ;mov y_center, 63
- ;call Draw_Circle
- ;mov y_center, 137
- ;mov color, 2
- ;call Draw_Circle 
+ mov x_center, 235
+ call Draw_Circle 
+ mov y_center, 63
+ call Draw_Circle
+ mov y_center, 137
+ mov color, 2
+ call Draw_Circle 
  
  mov color, 15
- ;mov startpoint, 250
- ;mov w, 220
- ;mov h, 170
- ;call Draw_lr_line 
- ;mov startpoint, 170
- ;mov w, 235
- ;mov h, 152
- ;call Draw_ub_line    
- ;mov startpoint, 122
- ;mov h, 115
- ;call Draw_ub_line
- ;mov startpoint, 85
- ;mov h, 78
- ;call Draw_ub_line 
+ mov startpoint, 250
+ mov w, 220
+ mov h, 170
+ call Draw_lr_line 
+ mov startpoint, 170
+ mov w, 235
+ mov h, 152
+ call Draw_ub_line    
+ mov startpoint, 122
+ mov h, 115
+ call Draw_ub_line
+ mov startpoint, 85
+ mov h, 78
+ call Draw_ub_line 
 
- ;mov startpoint, 195
- ;mov h, 5        
- ;mov w, 195
- ;call Draw_ub_line
- ;mov w, 125
- ;call Draw_ub_line
+ mov startpoint, 195
+ mov h, 5        
+ mov w, 195
+ call Draw_ub_line
+ mov w, 125
+ call Draw_ub_line
  
  mov w, 135                                                                                                               ; fix when done
- mov h, 2;7
+ mov h, 7
  call draw_pkak
- mov h, 2;7
+ mov h, 7
  
 u6: 
  call go  
