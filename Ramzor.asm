@@ -6,20 +6,114 @@
 ;=========================================
 ; Basic program to draw a circle
 ;=========================================
- mode db 13h ; type of graphic mode
- x_center dw 100 ; x center of circle, for drawing it
- y_center dw 100 ; y center of circle, for drawing it
- y_value dw 0 ; nessesary variable for circle drawings 
- x_value dw 15 ; radius of circle, for drawing it
- decision dw 0 ; nessesary variable for circle drawings   
- startpoint dw ? ; start point for line drawings
- h dw ? ; height of the line that is drawn
- w dw ? ; weight of the line that is drawn
- color db 3 ; color of the drawn thing
-;=========================================
-.CODE
+ mode db 13h ;
+ x_center dw 100
+ y_center dw 100
+ y_value dw 0
+ x_value dw 15 ;r
+ decision dw 0   
+ startpoint dw ?
+ h dw ?
+ w dw ?
+ color db 3 ;1=blue
+ homescreen1 db 13,10,'                   _____            __  __ __________  _____  $'
+homescreen2 db 13,10,'                  |  __ \     /\   |  \/  |___  / __ \|  __ \ $'
+homescreen3 db 13,10,'                  | |__) |   /  \  | \  / |  / / |  | | |__) | $'
+homescreen4 db 13,10,'                  |  _  /   / /\ \ | |\/| | / /| |  | |  _  / $' 
+homescreen5 db 13,10,'                  | | \ \  / ____ \| |  | |/ /_| |__| | | \ \ $' 
+homescreen6 db 13,10,'                  |_|  \_\/_/    \_\_|  |_/_____\____/|_|  \_\$' 
+                                                                                         
+namepresentation db 13,10,'                                by Ori Papkin                             $'
 
-Draw_Circle proc ; draw circle  
+lines       db 13,10,'  ____________________________________________________________________________    $'
+
+downtab db 13,10,'$'
+pressanykey db 13,10,'                    PLEASE PRESS ANY KEYBOARD KEY TO START                            $'
+
+pleaseuse db   13,10,'                                  PLEASE USE                         $' 
+pleaseuse1 db  13,10,'                   ______________           _______________           $'
+pleaseuse2 db  13,10,'                  |              |         |               |            $'
+pleaseuse3 db  13,10,'                  |  R to puase  |         | G to continue |           $'
+pleaseuse4 db  13,10,'                  |              |         |               |  $'
+
+
+;=========================================
+.CODE 
+homescreen proc ;this proc is showing the home screen of the game
+    
+    mov ah, 9 
+    
+    lea dx, downtab
+	int 21h
+    
+    lea dx, homescreen1
+	int 21h 
+	
+	lea dx, homescreen2
+	int 21h
+	
+	lea dx, homescreen3
+	int 21h
+	
+	lea dx, homescreen4
+	int 21h     
+	
+	lea dx, homescreen5
+	int 21h
+	
+	lea dx, homescreen6
+	int 21h
+	
+	lea dx, downtab
+	int 21h
+	
+	lea dx, downtab
+	int 21h    
+	
+	lea dx, namepresentation
+	int 21h   
+	
+	lea dx, downtab
+	int 21h
+	
+	lea dx, lines
+	int 21h
+	
+	lea dx, downtab
+	int 21h         
+	
+	lea dx, pleaseuse
+	int 21h
+	
+	lea dx, downtab
+	int 21h
+	
+	lea dx, pleaseuse1
+	int 21h           
+	        
+	lea dx, pleaseuse2
+	int 21h
+	
+	lea dx, pleaseuse3
+	int 21h                  
+	
+	lea dx, pleaseuse4
+	int 21h                   
+	
+	
+	lea dx, downtab
+	int 21h 
+	
+	lea dx, pressanykey
+	int 21h
+	
+	lea dx, downtab
+	int 21h  
+
+    ret    
+homescreen endp   
+
+Draw_Circle proc  
  mov x_value, 15
  mov y_value, 0 
  mov decision, 0
@@ -130,7 +224,8 @@ return:
  ret
 Draw_Circle endp   
 
-Draw_lr_line proc ; draw horizontal line. input: start point, height, color. output: line.
+; startpoint = start column of line, h = row, color = color, w = weight of line > horizontal line
+Draw_lr_line proc
    pusha 
     
     mov cx, startpoint  ; column
@@ -147,7 +242,8 @@ u2: mov ah, 0ch    ; put pixel
     ret 
 draw_lr_line endp
 
-Draw_ub_line proc ; draw vertical line. input: start point, weight, color. output: line.
+; startpoint = start row of line, w = weight, color = color, h = height of line > vertical line
+Draw_ub_line proc 
    pusha
     
     mov cx, w  ; column
@@ -164,8 +260,8 @@ u3: mov ah, 0ch    ; put pixel
     ret 
 draw_ub_line endp 
     
-
-draw_car proc ; draw square. input: weight, height. output: 50*50 square.
+; w = car's left-up's column, h = car's left-up's row > square car
+draw_car proc 
     mov cx, w 
     mov dx, h
     
@@ -198,7 +294,8 @@ draw_car proc ; draw square. input: weight, height. output: 50*50 square.
     ret
 draw_car endp   
 
-draw_pkak proc ; draw multiple squares one after another. input: first square's height. output: multiple squares one after another.
+; h = height of the first car > column of square cars
+draw_pkak proc 
     mov bx, h
   u4:  
     call draw_car
@@ -212,15 +309,18 @@ draw_pkak proc ; draw multiple squares one after another. input: first square's 
     ret
 draw_pkak endp 
 
-move_car proc ; input: square's height, square's weight. output: move square one pixel upwards.
+; w = car's left-up's column, h = car's left-up's row > move a square car one pixel upwards
+move_car proc
    pusha
     
     mov cx, w 
     mov dx, h   
       
-              
+    cmp h, 150
+    ja u20
+    
     mov startpoint, cx
-    add startpoint, 50
+    add startpoint, 50          
     mov w, cx 
     dec w
     mov h, dx
@@ -232,7 +332,8 @@ move_car proc ; input: square's height, square's weight. output: move square one
     call draw_lr_line
      
     mov color, 15
-                      
+   
+   u20:                         
     mov startpoint, cx
     add startpoint, 50
     mov w, cx 
@@ -257,7 +358,8 @@ move_car proc ; input: square's height, square's weight. output: move square one
     ret 
 move_car endp 
 
-move_car_bottom proc ; input: square's height, square's weight. output: move square's bottom one pixel upwards.
+; w = car's left-up's column, h = car's left-up's row > move a botton of a square car one pixel upwards
+move_car_bottom proc
      
     mov cx, w 
     mov dx, h 
@@ -286,8 +388,9 @@ move_car_bottom proc ; input: square's height, square's weight. output: move squ
     
     ret
 move_car_bottom endp
-
-go proc ; input: first square's height. output: move all squares one pixel upwards. 
+                                                          
+; h = height of the first car > move a column of square cars one pixel upwards
+go proc 
     dec h      
 
     mov bx, h 
@@ -318,7 +421,8 @@ go proc ; input: first square's height. output: move all squares one pixel upwar
     ret             
 go endp 
 
-red proc ; input: nothing. output: make the Ramzor red.
+; > Make the Ramzor red, according to the Israeli law
+red proc
     mov y_center, 137
     mov color, 7
     call Draw_Circle 
@@ -334,7 +438,8 @@ red proc ; input: nothing. output: make the Ramzor red.
     ret
 red endp
 
-green proc ; input: nothing. output: make the Ramzor green.
+; > Make the Ramzor green, according to the Israeli law
+green proc
     mov y_center, 100 
     mov color, 14
     call Draw_Circle   
@@ -354,7 +459,14 @@ green endp
 start: 
  
  mov ax,@DATA
- mov ds, ax
+ mov ds, ax  
+ 
+ call homescreen 
+ homescreenwait:
+  mov ah,00
+  int 16h
+  cmp al,0
+je homescreenwait 
  
  mov ah,0 ;subfunction 0
  mov al,mode ;select mode 13h 
@@ -378,10 +490,10 @@ start:
  mov w, 235
  mov h, 152
  call Draw_ub_line    
- mov startpoint, 122
+ mov startpoint, 121
  mov h, 115
  call Draw_ub_line
- mov startpoint, 85
+ mov startpoint, 84
  mov h, 78
  call Draw_ub_line 
 
@@ -392,12 +504,15 @@ start:
  mov w, 125
  call Draw_ub_line
  
- mov w, 135                                                                                                               ; fix when done
+ mov w, 135                                                                                                             
  mov h, 7
  call draw_pkak
  mov h, 7
  
-u6: 
+u6:
+ mov ah, 0Ch 
+ int 21h
+  
  call go  
  
  mov ah, 1
@@ -406,7 +521,7 @@ u6:
   
  mov ah, 00
  int 16h  
- 
+             
  cmp ah, 13h
  jne u6 
  
